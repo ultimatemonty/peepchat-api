@@ -30,6 +30,15 @@ config :plug, :mimes, %{
   "application/vnd.api+json" => {"json-api"}
 }
 
+config :guardian, Guardian,
+  allowed_algos: ["HS512"],
+  verify_module: Guardian.JWT,
+  issuer: "Peepchat",
+  ttl: { 30, :days },
+  verify_issuer: true,
+  secret_key: System.get_env("GUARDIAN_SECRET") || "bKl2BOd9NJwRB9b9/qnuV9yKoaFQqw0Nn7VSvoS1aiQ6pGYLcJoqrxyYCl1ARz0O",
+  serializer: Peepchat.GuardianSerializer
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
