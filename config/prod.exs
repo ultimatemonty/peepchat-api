@@ -18,7 +18,7 @@ config :peepchat, Peepchat.Endpoint,
   secret_key_base: System.get_env("SECRET_KEY_BASE"),
   cache_static_manifest: "priv/static/manifest.json"
 
-config :peepchat, Peepchat.Repo
+config :peepchat, Peepchat.Repo,
   adapter: Ecto.Adapters.Postgres,
   url: System.get_env("DATABASE_URL"),
   pool_size: 20
