@@ -1,25 +1,14 @@
-machine:
-  environment:
-    PATH: "$HOME/.asdf/bin:$HOME/.asdf/shims:$PATH"
 dependencies:
+  pre:
+    - script/ci/prepare.sh
   cache_directories:
-    - ~/.asdf
+    - ~/dependencies
+    - ~/.mix
     - _build
     - deps
-  pre:
-    - if ! asdf | grep version; then git clone https://github.com/HashNuke/asdf.git ~/.asdf; fi
-    - if ! asdf plugin-list | grep erlang; then asdf plugin-add erlang https://github.com/HashNuke/asdf-erlang.git; fi
-    - if ! asdf plugin-list | grep elixir; then asdf plugin-add elixir https://github.com/HashNuke/asdf-elixir.git; fi
-    - asdf install
-  override:
-    - yes | mix deps.get
-    - yes | mix local.rebar
-database:
-  override:
-    - mix ecto.setup
 test:
   override:
-    - mix test
+    - script/ci/tests.sh
 deployment:
   staging:
     branch: master
