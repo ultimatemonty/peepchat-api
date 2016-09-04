@@ -8,7 +8,7 @@ defmodule Peepchat.User do
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
 
-    timestamps()
+    timestamps
   end
 
   @required_fields ~w(email password password_confirmation)
