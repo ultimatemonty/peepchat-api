@@ -1,4 +1,5 @@
 # Peepchat
+[![CircleCI](https://circleci.com/gh/ultimatemonty/peepchat-api.svg?style=svg)](https://circleci.com/gh/ultimatemonty/peepchat-api)
 
 To start your Phoenix app:
 
