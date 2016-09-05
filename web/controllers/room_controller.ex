@@ -1,8 +1,9 @@
 defmodule Peepchat.RoomController do
   use Peepchat.Web, :controller
+  import Ecto.Query
 
   alias Peepchat.Room
-  
+
   plug Guardian.Plug.EnsureAuthenticated, handler: Peepchat.AuthErrorHandler
 
   def index(conn, %{"user_id" => user_id}) do
@@ -10,7 +11,7 @@ defmodule Peepchat.RoomController do
     |> where(owner_id: ^user_id)
     |> Repo.all
 
-    render(conn, "index.json", rooms: rooms)
+    render(conn, "index.json", data: rooms)
   end
 
   def index(conn, _params) do
@@ -18,11 +19,10 @@ defmodule Peepchat.RoomController do
     render(conn, "index.json", data: rooms)
   end
 
-  def create(conn, %{"data" =< %{"type" => "rooms", "attributes": => room_params, "relationships" => _}}) do
+  def create(conn, %{"data" => %{"type" => "rooms", "attributes" => room_params, "relationships" => _}}) do
     # Get the current user
     current_user = Guardian.Plug.current_resource(conn)
-
-    # Build the changeset
+    # Build the current user's ID into the changeset
     changeset = Room.changeset(%Room{owner_id: current_user.id}, room_params)
 
     case Repo.insert(changeset) do
@@ -30,7 +30,7 @@ defmodule Peepchat.RoomController do
         conn
         |> put_status(:created)
         |> put_resp_header("location", room_path(conn, :show, room))
-        |> render("show.json", room: room)
+        |> render("show.json", data: room)
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
@@ -40,10 +40,10 @@ defmodule Peepchat.RoomController do
 
   def show(conn, %{"id" => id}) do
     room = Repo.get!(Room, id)
-    render(conn, "show.json", room: room)
+    render(conn, "show.json", data: room)
   end
 
-  def update(conn, %{"id" => id, "room" => room_params}) do
+  def update(conn, %{"id" => id, "data" => %{"id" => _, "type" => "rooms", "attributes" => room_params}}) do
     current_user = Guardian.Plug.current_resource(conn)
 
     room = Room
@@ -54,7 +54,7 @@ defmodule Peepchat.RoomController do
 
     case Repo.update(changeset) do
       {:ok, room} ->
-        render(conn, "show.json", room: room)
+        render(conn, "show.json", data: room)
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
