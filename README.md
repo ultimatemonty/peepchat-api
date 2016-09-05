@@ -1,6 +1,8 @@
 # Peepchat
 [![CircleCI](https://circleci.com/gh/ultimatemonty/peepchat-api.svg?style=svg)](https://circleci.com/gh/ultimatemonty/peepchat-api)
 
+UI for this app [here](https://github.com/ultimatemonty/peepchat-ui)
+
 To start your Phoenix app:
 
   * Install dependencies with `mix deps.get`
