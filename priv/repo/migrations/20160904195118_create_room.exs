@@ -9,6 +9,7 @@ defmodule Peepchat.Repo.Migrations.CreateRoom do
       timestamps()
     end
     create index(:rooms, [:owner_id])
-
+    # unique room names, across the entire app
+    create index(:rooms, [:name], unique: true)
   end
 end
